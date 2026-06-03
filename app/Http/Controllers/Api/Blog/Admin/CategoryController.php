@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Api\Blog\Admin;
 
+use App\Http\Requests\BlogCategoryCreateRequest;
+use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\BlogCategory;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CategoryController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $paginator = BlogCategory::paginate(5);
@@ -18,42 +16,34 @@ class CategoryController extends BaseController
         return $paginator;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(BlogCategoryCreateRequest $request)
     {
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:blog_categories,slug'],
-            'parent_id' => ['nullable', 'integer', 'exists:blog_categories,id'],
-            'description' => ['nullable', 'string'],
-        ]);
+        $data = $request->input();
 
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['title']);
         }
 
-        $item = BlogCategory::create($data);
+        $item = (new BlogCategory())->create($data);
 
-        return [
-            'success' => true,
-            'message' => 'Успішно збережено',
-            'data' => $item,
-        ];
+        if ($item) {
+            return [
+                'success' => true,
+                'message' => 'Успішно збережено',
+            ];
+        }
+
+        return ['message' => 'Помилка збереження'];
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(BlogCategoryUpdateRequest $request, string $id)
     {
         $item = BlogCategory::find($id);
         if (empty($item)) {
             return ['message' => "Запис id=[{$id}] не знайдено"];
         }
 
-        $data = $request->all();
+        $data = $request->input();
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['title']);
         }
@@ -66,8 +56,8 @@ class CategoryController extends BaseController
                 'message' => 'Успішно збережено',
                 'data' => $item->fresh(),
             ];
-        } else {
-            return ['message' => 'Помилка збереження'];
         }
+
+        return ['message' => 'Помилка збереження'];
     }
 }
