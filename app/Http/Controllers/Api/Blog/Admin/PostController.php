@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api\Blog;
+namespace App\Http\Controllers\Api\Blog\Admin;
 
 use App\Repositories\BlogPostRepository;
 use Illuminate\Http\Request;
 
 class PostController extends BaseController
 {
-    public function __construct(
-        private BlogPostRepository $blogPostRepository
-    ) {
+    public function __construct(private BlogPostRepository $blogPostRepository)
+    {
         // parent::__construct();
     }
 
@@ -27,6 +26,14 @@ class PostController extends BaseController
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
         //
     }
