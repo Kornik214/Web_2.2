@@ -5,17 +5,14 @@ namespace App\Http\Controllers\Api\Blog\Admin;
 use App\Http\Requests\BlogPostUpdateRequest;
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class PostController extends BaseController
 {
     public function __construct(
         private BlogPostRepository $blogPostRepository,
         private BlogCategoryRepository $blogCategoryRepository
-    )
-    {
+    ) {
         // parent::__construct();
     }
 
@@ -51,28 +48,21 @@ class PostController extends BaseController
     public function update(BlogPostUpdateRequest $request, string $id)
     {
         $item = $this->blogPostRepository->getEdit($id);
-        if (empty($item)) { // якщо ід не знайдено
+        if (empty($item)) {
             return ['message' => "Запис id=[{$id}] не знайдено"];
         }
 
-        $data = $request->all(); // отримаємо масив даних, які надійшли з форми
-
-        if (empty($data['slug'])) { // якщо псевдонім порожній
-            $data['slug'] = Str::slug($data['title']); // генеруємо псевдонім
-        }
-        if (empty($item->published_at) && $data['is_published']) { // якщо published_at порожнє і is_published = 1
-            $data['published_at'] = Carbon::now(); // генеруємо поточну дату
-        }
-        $result = $item->update($data); // оновлюємо дані об'єкта і зберігаємо в БД
+        $data = $request->all();
+        $result = $item->update($data);
 
         if ($result) {
             return [
                 'success' => true,
                 'message' => 'Успішно збережено',
             ];
-        } else {
-            return ['message' => 'Помилка збереження'];
         }
+
+        return ['message' => 'Помилка збереження'];
     }
 
     /**
