@@ -17,6 +17,11 @@ class BlogCategoryObserver
         $this->setSlug($blogCategory);
     }
 
+    /**
+     * Обробка перед оновленням запису.
+     *
+     * @param  BlogCategory  $blogCategory
+     */
     public function updating(BlogCategory $blogCategory)
     {
         $this->setSlug($blogCategory);

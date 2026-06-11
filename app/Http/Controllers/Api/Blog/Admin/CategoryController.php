@@ -45,7 +45,6 @@ class CategoryController extends BaseController
         }
 
         $data = $request->input();
-
         $result = $item->update($data);
 
         if ($result) {
