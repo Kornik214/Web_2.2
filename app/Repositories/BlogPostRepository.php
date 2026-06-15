@@ -46,4 +46,32 @@ class BlogPostRepository extends CoreRepository
     {
         return $this->startConditions()->find($id);
     }
+
+    /**
+     * Отримати один пост для публічного перегляду
+     */
+    public function getShow($id)
+    {
+        $columns = [
+            'id',
+            'title',
+            'slug',
+            'excerpt',
+            'content_raw',
+            'is_published',
+            'published_at',
+            'user_id',
+            'category_id',
+        ];
+
+        return $this->startConditions()
+            ->select($columns)
+            ->with([
+                'category' => function ($query) {
+                    $query->select(['id', 'title']);
+                },
+                'user:id,name',
+            ])
+            ->find($id);
+    }
 }

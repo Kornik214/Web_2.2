@@ -40,6 +40,22 @@ class PostController extends BaseController
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $item = $this->blogPostRepository->getShow($id);
+
+        if (empty($item)) {
+            return [
+                'message' => "Запис id=[{$id}] не знайдено",
+            ];
+        }
+
+        return $item;
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
