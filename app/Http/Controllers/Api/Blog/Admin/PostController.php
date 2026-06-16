@@ -6,6 +6,7 @@ use App\Jobs\BlogPostAfterCreateJob;
 use App\Jobs\BlogPostAfterDeleteJob;
 use App\Http\Requests\BlogPostCreateRequest;
 use App\Http\Requests\BlogPostUpdateRequest;
+use App\Http\Resources\Api\Blog\Admin\PostResource;
 use App\Models\BlogPost;
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
@@ -27,9 +28,10 @@ class PostController extends BaseController
      */
     public function index()
     {
-        $paginator = $this->blogPostRepository->getAllWithPaginate();
+        $perPage = request()->integer('per_page', 25);
+        $paginator = $this->blogPostRepository->getAllWithPaginate($perPage);
 
-        return $paginator;
+        return PostResource::collection($paginator);
     }
 
     /**
