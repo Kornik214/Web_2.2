@@ -12,7 +12,6 @@ Route::prefix('blog')->group(function () {
 
 Route::prefix('admin/blog')->group(function () {
     Route::apiResource('categories', CategoryController::class)
-        ->only(['index', 'store', 'update'])
         ->names('blog.admin.categories');
 
     Route::apiResource('posts', PostController::class)

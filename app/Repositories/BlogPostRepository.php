@@ -14,7 +14,7 @@ class BlogPostRepository extends CoreRepository
     /**
      * Отримати список статей
      */
-    public function getAllWithPaginate()
+    public function getAllWithPaginate($perPage = 25)
     {
         $columns = [
             'id',
@@ -36,7 +36,7 @@ class BlogPostRepository extends CoreRepository
                 //'category:id,title',
                 'user:id,name',
             ])
-            ->paginate(25);
+            ->paginate($perPage);
     }
 
     /**

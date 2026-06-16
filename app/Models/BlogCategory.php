@@ -31,7 +31,7 @@ class BlogCategory extends Model
      */
     public function parentCategory()
     {
-        return $this->belongsTo(BlogCategory::class, 'parent_id', 'id');
+        return $this->belongsTo(BlogCategory::class, 'parent_id', 'id')->withTrashed();
     }
 
     /**
